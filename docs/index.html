@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应用下载 - 智能设备检测</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 20px;
+        }
+        
+        .logo img[src=""],
+        .logo img:not([src]) {
+            display: none;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .device-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .device-info p {
+            margin: 8px 0;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .ios-btn {
+            background: #007AFF;
+        }
+        
+        .ios-btn:hover {
+            background: #0056CC;
+            transform: translateY(-2px);
+        }
+        
+        .android-btn {
+            background: #34C759;
+        }
+        
+        .android-btn:hover {
+            background: #30A14E;
+            transform: translateY(-2px);
+        }
+        
+        .qr-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        
+        #qrcode {
+            display: inline-block;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .manual-select {
+            margin-top: 25px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        .manual-select h3 {
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 18px;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn-group .download-btn {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .deploy-info {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .deploy-info h3 {
+            color: #007AFF;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="logo.png" alt="XClass Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;height:100%;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;color:white;font-size:36px;font-weight:bold;\'>X</div>'">
+        </div>
+        <h1>下载我们的应用</h1>
+        <p class="subtitle">自动识别您的设备并推荐合适的版本</p>
+        
+        <div class="device-info">
+            <p>检测到的设备: <span id="device-type">正在检测...</span></p>
+            <p>推荐版本: <span id="recommended-version">检测中...</span></p>
+        </div>
+        
+        <div id="auto-download-section">
+            <!-- 这里会根据设备类型动态显示下载按钮 -->
+        </div>
+        
+        <div class="qr-container">
+            <p>扫描二维码下载应用</p>
+            <div id="qrcode"></div>
+            <p class="instructions">使用手机相机或二维码扫描应用扫描上方二维码</p>
+        </div>
+        
+        <div class="manual-select">
+            <h3>手动选择下载</h3>
+            <div class="btn-group">
+                <a href="https://www.pgyer.com/xclass-ios" class="download-btn ios-btn" target="_blank">iOS 下载</a>
+                <a href="https://www.pgyer.com/xclass-android" class="download-btn android-btn" target="_blank">Android 下载</a>
+            </div>
+        </div>
+        
+        <div class="deploy-info">
+            <h3>使用说明</h3>
+            <p>• iOS 和 Android 设备访问此页面将自动跳转到对应的下载页面</p>
+            <p>• 也可以使用上方二维码或手动选择下载按钮</p>
+            <p>• 如果自动跳转失败，请手动点击下载按钮</p>
+        </div>
+    </div>
+
+    <script>
+        // 设备检测函数
+        function detectDevice() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // 检测iOS设备（包括iPad）
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                // 新iPad可能被识别为Mac，需要额外检测
+                if (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
+                    return 'iOS'; // iPad
+                }
+                return 'iOS';
+            }
+            
+            // 检测Android设备
+            if (/android/i.test(userAgent)) {
+                return 'Android';
+            }
+            
+            // 其他设备
+            return 'Other';
+        }
+        
+        // 生成二维码
+        function generateQRCode(url) {
+            // 清除之前的二维码
+            document.getElementById('qrcode').innerHTML = '';
+            
+            // 生成新的二维码
+            QRCode.toCanvas(document.getElementById('qrcode'), url, {
+                width: 200,
+                height: 200,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            }, function(error) {
+                if (error) console.error(error);
+            });
+        }
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            const deviceType = detectDevice();
+            const deviceTypeElement = document.getElementById('device-type');
+            const recommendedVersionElement = document.getElementById('recommended-version');
+            const autoDownloadSection = document.getElementById('auto-download-section');
+            
+            // 更新设备信息
+            deviceTypeElement.textContent = deviceType;
+            
+            // 根据设备类型设置下载链接和二维码
+            let downloadUrl, downloadText, buttonClass;
+            
+            if (deviceType === 'iOS') {
+                downloadUrl = 'https://www.pgyer.com/xclass-ios';
+                downloadText = '下载 iOS 版本';
+                buttonClass = 'ios-btn';
+                recommendedVersionElement.textContent = 'iOS 版本';
+            } else if (deviceType === 'Android') {
+                downloadUrl = 'https://www.pgyer.com/xclass-android';
+                downloadText = '下载 Android 版本';
+                buttonClass = 'android-btn';
+                recommendedVersionElement.textContent = 'Android 版本';
+            } else {
+                downloadUrl = window.location.href; // 默认显示当前页面
+                downloadText = '前往下载页面';
+                buttonClass = 'ios-btn';
+                recommendedVersionElement.textContent = '请手动选择';
+            }
+            
+            // 生成自动下载按钮
+            if (deviceType === 'iOS' || deviceType === 'Android') {
+                autoDownloadSection.innerHTML = `
+                    <a href="${downloadUrl}" class="download-btn ${buttonClass}" target="_blank">
+                        ${downloadText}
+                    </a>
+                `;
+            } else {
+                autoDownloadSection.innerHTML = `
+                    <p style="color: #666; margin-bottom: 20px;">无法自动识别您的设备，请手动选择下载版本</p>
+                `;
+            }
+            
+            // 生成二维码
+            generateQRCode(downloadUrl);
+            
+            // 如果是移动设备，立即自动跳转到对应的下载页面
+            if (deviceType === 'iOS') {
+                // iOS设备立即跳转
+                window.location.href = 'https://www.pgyer.com/xclass-ios';
+            } else if (deviceType === 'Android') {
+                // Android设备立即跳转
+                window.location.href = 'https://www.pgyer.com/xclass-android';
+            }
+        });
+    </script>
+</body>
+</html>
+
