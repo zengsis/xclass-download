@@ -172,6 +172,36 @@
             font-weight: 600;
         }
         
+        .qr-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        
+        .qr-container p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+        
         @media (max-width: 480px) {
             .container {
                 padding: 25px;
@@ -190,7 +220,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="../logo.png" alt="XClass Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;height:100%;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;color:white;font-size:36px;font-weight:bold;\'>X</div>'">
+            <img src="logo.png" alt="XClass Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;height:100%;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;color:white;font-size:36px;font-weight:bold;\'>X</div>'">
         </div>
         <h1>XClass 应用下载</h1>
         <p class="subtitle">请根据您的使用需求选择对应版本</p>
@@ -198,7 +228,7 @@
         <div class="download-notice">
             <strong>📱 下载方式说明</strong>
             <ul>
-                <li><span class="highlight">内部测试版本：</span>iOS和Android用户均需根据更新说明选择对应的域名版本进行下载。</li>
+                <li><span class="highlight">内部测试版本：</span>iOS和Android用户均需根据更新说明选择所需版本进行下载。</li>
                 <li><span class="highlight">其他版本：</span>
                     <ul>
                         <li><span class="highlight">iOS用户：</span>需通过Apple TestFlight平台下载安装，不同版本对应不同的TestFlight链接。</li>
@@ -216,37 +246,44 @@
                 </h3>
                 <p>面向内部测试用户，包含正式环境、测试环境与海外环境版本，请根据更新说明选择对应域名版本</p>
             </div>
+
+            <div class="version-item" onclick="window.location.href='domestic-test/'">
+                <h3>
+                    国内TestFlight体验版（测试环境）
+                    <span class="version-badge badge-test">Test Env</span>
+                </h3>
+                <p>面向国内用户的iOS TestFlight体验版本，连接测试环境服务器，提供给用户体验</p>
+            </div>
             
+             <!-- <div class="version-item" onclick="window.location.href='domestic-official/'">
+                <h3>
+                    国内正式环境版
+                    <span class="version-badge badge-official">Official Env</span>
+                </h3>
+                <p>面向国内用户的正式域名环境测试版本，连接正式环境服务器，提供给用户体验</p>
+            </div> -->
+            
+            <div class="version-item" onclick="window.location.href='overseas-test/'">
+                <h3>
+                    海外TestFlight体验版（测试环境）
+                    <span class="version-badge badge-test">Test Env</span>
+                </h3>
+                <p>面向海外用户的iOS TestFlight体验版本，连接测试环境服务器，提供给用户体验</p>
+            </div>      
+
             <!-- <div class="version-item" onclick="window.location.href='overseas-official/'">
                 <h3>
                     海外正式环境版
                     <span class="version-badge badge-official">Official Env</span>
                 </h3>
-                <p>面向海外用户的正式域名环境测试版本，连接正式环境服务器，用于功能测试与验证</p>
+                <p>面向海外用户的正式域名环境测试版本，连接正式环境服务器，提供给用户体验</p>
             </div> -->
-            
-            <div class="version-item" onclick="window.location.href='overseas-test/'">
-                <h3>
-                    海外测试环境版 （Apple TestFlight体验版）
-                    <span class="version-badge badge-test">Test Env</span>
-                </h3>
-                <p>面向iOS海外用户的测试域名环境版本，连接测试环境服务器，用于新功能验证与问题测试</p>
-            </div>
-            
-            <!-- <div class="version-item" onclick="window.location.href='domestic-official/'">
-                <h3>
-                    国内正式环境版
-                    <span class="version-badge badge-official">Official Env</span>
-                </h3>
-                <p>面向国内用户的正式域名环境测试版本，连接正式环境服务器，用于功能测试与验证</p>
-            </div> -->
-            
-            <div class="version-item" onclick="window.location.href='domestic-test/'">
-                <h3>
-                    国内测试环境版 （Apple TestFlight体验版）
-                    <span class="version-badge badge-test">Test Env</span>
-                </h3>
-                <p>面向国内用户的测试域名环境版本，连接测试环境服务器，用于新功能验证与问题测试</p>
+        
+        </div>
+        
+        <div class="qr-container">
+            <div class="qr-code">
+                <img src="xclass_download_code.png" alt="下载二维码">
             </div>
         </div>
         
